@@ -30,15 +30,13 @@ class TodoDetailView(generics.RetrieveUpdateDestroyAPIView):
         return Todo.objects.filter(user=self.request.user)
 
 class LogoutView(APIView):
-    permission_classes = (IsAuthenticated,)
- 
+    permission_classes = [IsAuthenticated]
     def post(self, request):
         try:
             refresh_token = request.data["refresh"]
             token = RefreshToken(refresh_token)
             token.blacklist()
- 
+
             return Response(status=204)
         except Exception as e:
             return Response(status=400, data={"detail": str(e)})
- 
